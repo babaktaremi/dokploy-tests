@@ -1,8 +1,14 @@
+using StackExchange.Redis;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Configuration.AddEnvironmentVariables();
+
+var redis=ConnectionMultiplexer.Connect(builder.Configuration["REDIS_CONNECTION_STRING"] ?? "localhost:6379");
+builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
 var app = builder.Build();
 
@@ -35,6 +41,14 @@ app.MapGet("/weatherforecast", () =>
 
 app.MapGet("/hello", () => "Hello World!")
     .WithName("HelloWorld");
+
+app.MapGet("/redis", async (IConnectionMultiplexer redis) =>
+{
+    var db = redis.GetDatabase();
+    await db.StringSetAsync("mykey", "Hello Redis!");
+    var value = await db.StringGetAsync("mykey");
+    return value.ToString();
+}).WithName("GetRedisValue");
 
 app.Run();
 
