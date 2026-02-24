@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Configuration.AddEnvironmentVariables();
-
+System.Console.WriteLine("REDIS_CONNECTION_STRING: " + builder.Configuration["REDIS_CONNECTION_STRING"]);
 var redis=ConnectionMultiplexer.Connect(builder.Configuration["REDIS_CONNECTION_STRING"] ?? "localhost:6379");
 builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
