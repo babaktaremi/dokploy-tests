@@ -1,0 +1,6 @@
+@Dokploy_Tests_HostAddress = http://localhost:5161
+
+GET {{Dokploy_Tests_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
