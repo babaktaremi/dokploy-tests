@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Configuration.AddEnvironmentVariables();
 System.Console.WriteLine("REDIS_CONNECTION_STRING: " + builder.Configuration["REDIS_CONNECTION_STRING"]);
+System.Console.WriteLine("Postgres Connection String: " + builder.Configuration["ConnectionStrings:Postgres"]);
 var redis=ConnectionMultiplexer.Connect(builder.Configuration["REDIS_CONNECTION_STRING"] ?? "localhost:6379");
 builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
